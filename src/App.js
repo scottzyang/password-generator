@@ -1,4 +1,4 @@
-import Password from './Password';
+import Password from './password';
 import './App.css';
 
 function App() {
