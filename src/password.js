@@ -1,10 +1,15 @@
 import React, { useState } from 'react';
+import { useDispatch } from 'react-redux';
+import { addPassword } from './features/passwords/passwordSlice';
+import PasswordsStrengthMeter from './PasswordsStrengthMeter';
+import './Password.css';
 
 function random(n) {
   return Math.floor(Math.random() * n);
 }
 
 function Password() {
+  const dispatch = useDispatch();
   const [password, setPassword] = useState('p@$$w0rd');
   const [name, setName] = useState('');
   const [passwordLength, setPasswordLength] = useState(8);
@@ -14,7 +19,7 @@ function Password() {
     const charCodeRangeStart = 33;
     const charCodeRangeEnd = 126;
 
-    for (let i = 0; i < 8; i++) {
+    for (let i = 0; i < passwordLength; i++) {
       const randomCharCode = random(charCodeRangeEnd - charCodeRangeStart + 1) + charCodeRangeStart;
       newPassword += String.fromCharCode(randomCharCode);
     }
@@ -23,12 +28,13 @@ function Password() {
   };
 
   return (
-    <div>
+    <div className="password-container">
       <input
         type="text"
         onChange={(e) => setPassword(e.target.value)}
         value={password}
       />
+      <PasswordsStrengthMeter password={password} />
       <input
         type="text"
         placeholder="Enter name or description"
@@ -46,6 +52,7 @@ function Password() {
       </div>
       <div>
         <button onClick={generatePassword}>Generate</button>
+        <button onClick={() => dispatch(addPassword({ name, password }))}>Save</button>
       </div>
     </div>
   );
